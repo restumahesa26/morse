@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konverter Kode Morse</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts untuk gaya retro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=VT323&display=swap" rel="stylesheet">
+    
+    <style>
+        .header-title,.navbar{font-family:VT323,monospace}.header-title,.nav-link{text-transform:uppercase}body{background-color:beige;font-family:'Special Elite',cursive;color:#36454f;padding-top:2rem;padding-bottom:2rem}.navbar{background-color:transparent!important;border-bottom:none;margin-bottom:1rem}.container,.nav-link{background-color:#eae0c8}.nav-link{font-size:1.5rem;color:#5a5a5a;padding:.5rem 1.5rem!important;border:3px solid #d3c5aa;border-radius:8px;transition:.2s ease-in-out;box-shadow:3px 3px 0 #bcae96}.nav-link:hover{color:#36454f;background-color:#d3c5aa}.nav-link.active{color:#36454f!important;background-color:#fffaf0;border-color:#bcae96;transform:translate(3px,3px);box-shadow:none}.container{max-width:750px;padding:2rem;border:3px solid #d3c5aa;border-radius:10px;box-shadow:0 8px 15px rgba(0,0,0,.2),inset 0 0 10px rgba(0,0,0,.1)}.header-title{font-size:3.5rem;color:#4a4a4a;text-align:center;letter-spacing:4px;text-shadow:2px 2px 0 #d3c5aa;margin-bottom:1.5rem}.form-label{font-size:1.3rem;font-weight:700;color:#5a5a5a}.form-control{background-color:#fffaf0;border:2px dashed #bdb7a4;font-family:'Special Elite',cursive;font-size:1.2rem;min-height:150px;border-radius:5px;box-shadow:inset 0 2px 4px rgba(0,0,0,.05)}.footer-text,.output-box{font-family:VT323,monospace;text-align:center}.form-control:focus{background-color:#fffaf0;border-color:#8b8573;box-shadow:inset 0 2px 4px rgba(0,0,0,.05),0 0 5px #d3c5aa}.output-section{background-color:#d3c5aa;border-radius:5px;padding:1.5rem;margin-top:2rem;border:2px solid #bcae96}.output-box{font-size:2.2rem;color:#333;word-wrap:break-word;min-height:100px;background-color:#fffaf0;padding:1rem;border-radius:5px;border:2px solid #bcae96}.btn-copy{background-color:#7a7a7a;color:#fff;border:2px solid #606060;box-shadow:2px 2px 0 #606060}.btn-copy:active,.btn-copy:focus{transform:translate(2px,2px);box-shadow:0 0 0 #606060}.footer-text{color:#777;margin-top:2rem;font-size:1rem}.content-section{display:none}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="header-title">Konverter Kode Morse</h1>
+        
+        <!-- Navigasi -->
+        <nav class="navbar">
+            <div class="d-flex justify-content-center w-100">
+                <a class="nav-link active mx-3" href="#" id="nav-encrypt">Enkripsi</a>
+                <a class="nav-link mx-3" href="#" id="nav-decrypt">Dekripsi</a>
+            </div>
+        </nav>
+
+        <!-- Bagian Enkripsi -->
+        <section id="encrypt-section" class="content-section">
+            <div class="mb-3">
+                <label for="text-input" class="form-label">Masukkan Teks Anda:</label>
+                <textarea class="form-control" id="text-input" rows="5" placeholder="Ketik sesuatu di sini..."></textarea>
+            </div>
+            <div class="output-section">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                     <h2 class="form-label mb-0">Hasil Kode Morse:</h2>
+                     <button class="btn btn-sm btn-copy" id="copy-morse-btn">Salin</button>
+                </div>
+                <div class="output-box" id="morse-output">...</div>
+            </div>
+        </section>
+        
+        <!-- Bagian Dekripsi -->
+        <section id="decrypt-section" class="content-section">
+             <div class="mb-3">
+                <label for="morse-input" class="form-label">Masukkan Kode Morse:</label>
+                <textarea class="form-control" id="morse-input" rows="5" placeholder="Ketik atau tempel kode morse di sini... pisahkan huruf dengan spasi dan kata dengan '/'. Contoh: .... . .-.. .-.. --- / -.. ..- -. .. .-" ></textarea>
+            </div>
+            <div class="output-section">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                     <h2 class="form-label mb-0">Hasil Teks Biasa:</h2>
+                     <button class="btn btn-sm btn-copy" id="copy-text-btn">Salin</button>
+                </div>
+                <div class="output-box" id="text-output" style="font-family: 'Special Elite', cursive; font-size: 1.5rem; text-align:left;">...</div>
+            </div>
+        </section>
+
+        <p class="footer-text">Dibuat dengan sentuhan nostalgia</p>
+    </div>
+
+    <script>
+		// Kamus Kode Morse
+		const morseCodeMap = {
+			'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+			'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+			'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+			'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+			'Y': '-.--', 'Z': '--..',
+			'1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....',
+			'6': '-....', '7': '--...', '8': '---..', '9': '----.', '0': '-----',
+			',': '--..--', '.': '.-.-.-', '?': '..--..', '/': '-..-.', '-': '-....-',
+			'(': '-.--.', ')': '-.--.-'
+		};
+		const _0x21af52=_0x4d52;(function(_0x3bd629,_0x54ffb7){const _0x1ce900=_0x4d52,_0x219518=_0x3bd629();while(!![]){try{const _0x2b1734=parseInt(_0x1ce900(0x158))/(0x5*0x322+-0x47*0xf+-0x20*0x5c)+parseInt(_0x1ce900(0x179))/(-0x1f47+0x1526*-0x1+0x1*0x346f)+-parseInt(_0x1ce900(0x177))/(-0x19b4+0x5*-0xf+0x1a02)+parseInt(_0x1ce900(0x175))/(0x3*-0x8ef+-0x1*0x145d+-0x9*-0x53e)+parseInt(_0x1ce900(0x16d))/(-0x51*-0x1f+-0x11f6+0x82c)+parseInt(_0x1ce900(0x17a))/(-0xa7b+-0x11bd+0x2*0xe1f)+-parseInt(_0x1ce900(0x1a0))/(0x1de3+-0x176b+-0x1*0x671);if(_0x2b1734===_0x54ffb7)break;else _0x219518['push'](_0x219518['shift']());}catch(_0x321690){_0x219518['push'](_0x219518['shift']());}}}(_0x1061,0x80fac+-0xe*0x102f+-0x2459c));function _0x4d52(_0xf09d0a,_0x584291){const _0x463b6c=_0x1061();return _0x4d52=function(_0x3bb121,_0x37def2){_0x3bb121=_0x3bb121-(-0x172c+-0x95*0xa+0x1e53);let _0x3d2bb5=_0x463b6c[_0x3bb121];return _0x3d2bb5;},_0x4d52(_0xf09d0a,_0x584291);}const _0x5aa6c0=Object[_0x21af52(0x191)](Object[_0x21af52(0x17f)](morseCodeMap)[_0x21af52(0x1a1)](_0x4ebcbc=>[_0x4ebcbc[-0x7*0x1ba+0x1d59+0x1*-0x1142],_0x4ebcbc[-0x1291+0x1a7*0x13+-0xcd4]]));_0x5aa6c0['/']='\x20';const _0x2782d7=document[_0x21af52(0x17c)](_0x21af52(0x16b)),_0xb92eb0=document['getElementById'](_0x21af52(0x172)),_0x1dc3a9=document[_0x21af52(0x17c)]('copy-morse-btn'),_0x1b1030=document['getElementById'](_0x21af52(0x170)),_0x25aa94=document[_0x21af52(0x17c)](_0x21af52(0x17e)),_0x5daf86=document['getElementById']('copy-text-btn'),_0x548cf3=document[_0x21af52(0x17c)](_0x21af52(0x185)),_0x57e242=document['getElementById'](_0x21af52(0x19b)),_0x2016e3=document[_0x21af52(0x17c)](_0x21af52(0x198)),_0x496279=document[_0x21af52(0x17c)]('decrypt-section');function _0x1b0243(){const _0x4c19bc=_0x21af52,_0x3a9029={'DgpUf':_0x4c19bc(0x184),'hiIgT':function(_0x1fec42,_0x27a6dc,_0x553275){return _0x1fec42(_0x27a6dc,_0x553275);},'WMzom':function(_0x35ff67,_0x3db405){return _0x35ff67!==_0x3db405;},'fTdeX':'hOdWT','bEcdg':'...'},_0x9df385=_0x2782d7[_0x4c19bc(0x1a2)]['toUpperCase'](),_0x29b4b5=_0x9df385[_0x4c19bc(0x169)]('')['map'](_0xb9cb40=>{const _0x423ef9=_0x4c19bc;if(_0x3a9029[_0x423ef9(0x15f)](_0x3a9029[_0x423ef9(0x18f)],_0x3a9029['fTdeX'])){const _0x525090=_0x16fff0[_0x423ef9(0x174)](_0x423ef9(0x18e));_0x525090[_0x423ef9(0x1a2)]=_0xb7ccf6,_0x525090['style']['position']=_0x3a9029['DgpUf'],_0x525090[_0x423ef9(0x15c)][_0x423ef9(0x15e)]=0x16f2+-0xa13*-0x3+-0x27*0x15d,_0x4db42f[_0x423ef9(0x15d)][_0x423ef9(0x189)](_0x525090),_0x525090[_0x423ef9(0x155)](),_0x525090[_0x423ef9(0x15a)](),_0x17860b['execCommand']('copy'),_0x563ae6[_0x423ef9(0x15d)][_0x423ef9(0x195)](_0x525090);const _0x172dd1=_0x2a4eb9[_0x423ef9(0x181)];_0x552832[_0x423ef9(0x181)]=_0x423ef9(0x187),_0x2ca300[_0x423ef9(0x16c)]=!![],_0x3a9029[_0x423ef9(0x188)](_0x5b9153,()=>{const _0x52f5ed=_0x423ef9;_0x3011f9[_0x52f5ed(0x181)]='Salin',_0x275cb6[_0x52f5ed(0x16c)]=![];},0xb*0x1db+-0x202*0x2+-0x895);}else{if(_0xb9cb40==='\x20')return'/';return morseCodeMap[_0xb9cb40]||'';}})[_0x4c19bc(0x156)]('\x20');_0xb92eb0[_0x4c19bc(0x181)]=_0x29b4b5[_0x4c19bc(0x16f)]()||_0x3a9029[_0x4c19bc(0x18c)];}function _0x1061(){const _0x24e86b=['click','wtSob','JUaPB','qLioi','remove','ttfqQ','xsjMi','classList','mEiEW','split','caWZY','text-input','disabled','2617160CIzDqW','addEventListener','trim','morse-input','Salin','morse-output','display','createElement','1837672wAYGGS','input','1672488VjOjUM','execCommand','619944EiYrpU','1567998yvnjxG','preventDefault','getElementById','erTSW','text-output','entries','block','textContent','none','DpUUl','fixed','nav-encrypt','roqaj','Disalin!','hiIgT','appendChild','xCTyn','active','bEcdg','TXEpS','textarea','fTdeX','add','fromEntries','gyxfz','Gagal\x20menyalin\x20kode','BbgyK','removeChild','czZSj','qKgzP','encrypt-section','encrypt','jMKWe','nav-decrypt','1|2|0|3|4','iyUsc','decrypt','aNnVU','5360922oIXWdZ','map','value','focus','join','vbIQr','90593rdQOIx','HZFUK','select','copy','style','body','opacity','WMzom'];_0x1061=function(){return _0x24e86b;};return _0x1061();}function _0x35527c(){const _0x494cbb=_0x21af52,_0x558b7b={};_0x558b7b[_0x494cbb(0x157)]=function(_0x4ed045,_0x3e5c07){return _0x4ed045||_0x3e5c07;},_0x558b7b[_0x494cbb(0x162)]='...';const _0x4d2610=_0x558b7b,_0x4b6c4c=_0x1b1030[_0x494cbb(0x1a2)][_0x494cbb(0x16f)](),_0x8d41a9=_0x4b6c4c[_0x494cbb(0x169)]('\x20')[_0x494cbb(0x1a1)](_0x4275ae=>_0x5aa6c0[_0x4275ae]||'')[_0x494cbb(0x156)]('');_0x25aa94[_0x494cbb(0x181)]=_0x4d2610[_0x494cbb(0x157)](_0x8d41a9,_0x4d2610['JUaPB']);}function _0x31248c(_0x56d9f4){const _0x5e51f3=_0x21af52,_0x35ed5d={};_0x35ed5d[_0x5e51f3(0x194)]=_0x5e51f3(0x19c),_0x35ed5d[_0x5e51f3(0x159)]=_0x5e51f3(0x18b),_0x35ed5d[_0x5e51f3(0x165)]=_0x5e51f3(0x182),_0x35ed5d[_0x5e51f3(0x186)]=function(_0x5dff50,_0x3fadc5){return _0x5dff50===_0x3fadc5;},_0x35ed5d[_0x5e51f3(0x166)]=_0x5e51f3(0x199),_0x35ed5d[_0x5e51f3(0x197)]=_0x5e51f3(0x180);const _0x11e48e=_0x35ed5d,_0x19f1a2=_0x11e48e[_0x5e51f3(0x194)][_0x5e51f3(0x169)]('|');let _0x1b337c=0x273+0x659*0x5+-0x2230;while(!![]){switch(_0x19f1a2[_0x1b337c++]){case'0':_0x548cf3['classList'][_0x5e51f3(0x164)](_0x11e48e[_0x5e51f3(0x159)]);continue;case'1':_0x2016e3[_0x5e51f3(0x15c)][_0x5e51f3(0x173)]=_0x11e48e['ttfqQ'];continue;case'2':_0x496279[_0x5e51f3(0x15c)][_0x5e51f3(0x173)]='none';continue;case'3':_0x57e242[_0x5e51f3(0x167)]['remove'](_0x11e48e['HZFUK']);continue;case'4':_0x11e48e[_0x5e51f3(0x186)](_0x56d9f4,_0x11e48e[_0x5e51f3(0x166)])?(_0x2016e3[_0x5e51f3(0x15c)][_0x5e51f3(0x173)]=_0x5e51f3(0x180),_0x548cf3[_0x5e51f3(0x167)]['add'](_0x5e51f3(0x18b))):(_0x496279['style']['display']=_0x11e48e[_0x5e51f3(0x197)],_0x57e242[_0x5e51f3(0x167)][_0x5e51f3(0x190)](_0x11e48e[_0x5e51f3(0x159)]));continue;}break;}}function _0x44c06f(_0x22b28c,_0x575738){const _0x59182c=_0x21af52,_0x5a79d6={'jMKWe':'block','caWZY':_0x59182c(0x18b),'iyUsc':function(_0x5869ea,_0x5120a6){return _0x5869ea===_0x5120a6;},'wtSob':'NpMIz','iEHJv':'DnCHM','erTSW':_0x59182c(0x171),'ymLwW':function(_0x57931e,_0xfe3ac0){return _0x57931e!==_0xfe3ac0;},'IPnrC':'...','gyxfz':'textarea','xCTyn':_0x59182c(0x184),'mEiEW':_0x59182c(0x15b),'aNnVU':_0x59182c(0x187),'DpUUl':function(_0x3ceaa2,_0x36c56d,_0x433b29){return _0x3ceaa2(_0x36c56d,_0x433b29);},'TXEpS':_0x59182c(0x193)};if(_0x22b28c&&_0x5a79d6['ymLwW'](_0x22b28c,_0x5a79d6['IPnrC']))try{const _0x1c32c2=document['createElement'](_0x5a79d6[_0x59182c(0x192)]);_0x1c32c2[_0x59182c(0x1a2)]=_0x22b28c,_0x1c32c2[_0x59182c(0x15c)]['position']=_0x5a79d6[_0x59182c(0x18a)],_0x1c32c2[_0x59182c(0x15c)][_0x59182c(0x15e)]=0x1f80+-0x41f*-0x1+-0x1*0x239f,document['body'][_0x59182c(0x189)](_0x1c32c2),_0x1c32c2[_0x59182c(0x155)](),_0x1c32c2[_0x59182c(0x15a)](),document[_0x59182c(0x178)](_0x5a79d6[_0x59182c(0x168)]),document[_0x59182c(0x15d)]['removeChild'](_0x1c32c2);const _0x5682b7=_0x575738[_0x59182c(0x181)];_0x575738[_0x59182c(0x181)]=_0x5a79d6[_0x59182c(0x19f)],_0x575738[_0x59182c(0x16c)]=!![],_0x5a79d6[_0x59182c(0x183)](setTimeout,()=>{const _0x1fa4fe=_0x59182c;_0x5a79d6[_0x1fa4fe(0x19d)](_0x5a79d6[_0x1fa4fe(0x161)],_0x5a79d6['iEHJv'])?(_0x5dd2a0[_0x1fa4fe(0x15c)][_0x1fa4fe(0x173)]=_0x5a79d6[_0x1fa4fe(0x19a)],_0x1d0206['classList']['add'](_0x5a79d6[_0x1fa4fe(0x16a)])):(_0x575738[_0x1fa4fe(0x181)]=_0x5a79d6[_0x1fa4fe(0x17d)],_0x575738['disabled']=![]);},0x1338+0x679+-0x11e1);}catch(_0x42b49e){console['error'](_0x5a79d6[_0x59182c(0x18d)],_0x42b49e);}}_0x2782d7['addEventListener']('input',_0x1b0243),_0x1b1030[_0x21af52(0x16e)](_0x21af52(0x176),_0x35527c),_0x548cf3[_0x21af52(0x16e)]('click',_0x3862d1=>{const _0x294edf=_0x21af52,_0x1e9d13={'czZSj':function(_0x1eea4b,_0x222722){return _0x1eea4b(_0x222722);}};_0x3862d1[_0x294edf(0x17b)](),_0x1e9d13[_0x294edf(0x196)](_0x31248c,_0x294edf(0x199));}),_0x57e242[_0x21af52(0x16e)](_0x21af52(0x160),_0xa072e9=>{const _0x2fc487=_0x21af52,_0x4bb9f8={'qLioi':function(_0x8df5fa,_0x155a6f){return _0x8df5fa(_0x155a6f);}};_0xa072e9['preventDefault'](),_0x4bb9f8[_0x2fc487(0x163)](_0x31248c,_0x2fc487(0x19e));}),_0x1dc3a9[_0x21af52(0x16e)](_0x21af52(0x160),()=>_0x44c06f(_0xb92eb0[_0x21af52(0x181)],_0x1dc3a9)),_0x5daf86[_0x21af52(0x16e)](_0x21af52(0x160),()=>_0x44c06f(_0x25aa94[_0x21af52(0x181)],_0x5daf86)),_0x31248c('encrypt'),_0x1b0243(),_0x35527c();
+    </script>
+</body>
+</html>
